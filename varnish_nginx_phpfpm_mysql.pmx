@@ -1,0 +1,53 @@
+---
+name: Varnish with NGINX, PHP FPM and MySQL
+description: Varnish with NGINX, PHP FPM and MySQL
+keywords: nginx, varnish, php, fpm, mysql, public
+recommended:
+type: PHP
+documentation: |
+  TO BE DONE?...
+  =========
+
+  ##Instructions
+  Adjust the values of the environmental variables on the MySQL service to match your needs. When configuring Drupal via the UI, use these values.
+
+  For Database Address, use the MySQL service ALIAS value from your link entry on the Drupal service. This value is mapped to the IP of the MySQL container. No port is needed. Be sure to select **MySQL** as your database type when filling in the Drupal setup.
+
+  To view the GUI after launching the template, browse to http://panamax.local:8080.
+
+
+images:
+- category: DB Tier
+  name: MySQL
+  source: centurylink/mysql:5.5
+  description:
+  type: Default
+  expose:
+  - '3306'
+  ports: []
+  links: []
+  environment:
+  - variable: MYSQL_ROOT_PASSWORD
+    value: pass
+  - variable: MYSQL_DATABASE
+    value: mybase
+  - variable: MYSQL_USER
+    value: user
+  - variable: MYSQL_PASSWORD
+    value: pass
+  volumes: []
+- category: Web Tier
+  name: Drupal 7.28
+  source: centurylink/drupal:7.28
+  description:
+  type: Default
+  expose:
+  - '80'
+  ports:
+  - host_port: '8080'
+    container_port: '80'
+  links:
+  - service: MySQL
+    alias: MYSQLDB
+  environment: []
+  volumes: []
