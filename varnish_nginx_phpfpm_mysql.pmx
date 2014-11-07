@@ -51,3 +51,32 @@ images:
     alias: MYSQLDB
   environment: []
   volumes: []
+- category: App Tier
+  name: php-fpm
+  source: jprjr/php-fpm
+  description:
+  type: Default
+  expose:
+  - '9000'
+  environment: []
+  volumes: []
+- category: Web Tier
+  name: NGINX
+  source: nginx
+  description:
+  type: Default
+  expose:
+  - '80'
+  ports:
+  - host_port: '8080'
+    container_port: '80'
+  links:
+  - service: php-fpm
+    alias: webstack_php
+  environment: []
+  volumes:
+  - host_path: "/home/core/data/"
+    container_path: "/usr/share/nginx/html"
+  - host_path: "/home/core/data/conf/nginx.conf"
+    container_path: "/nginx.conf"
+  command: 'nginx -c /nginx.conf'
